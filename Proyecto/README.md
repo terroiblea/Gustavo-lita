@@ -84,9 +84,7 @@ Se detallan y se muestra cómo son las conexiones entre el Arduino, sensor de co
 | D8      | OUT                              | Envía la señal de frecuencia correspondiente al color detectado |
 | GND     | OE                               | Habilita la salida (activo en LOW) |
 
-![sensor de color](imagenes/sensor_de_color.jpg)
-
-
+![sensor de color](./imagenes/sensor_de_color.jpg)
 
 ### ⚡️ Conexión de la pantalla TFT circular 
 
@@ -94,25 +92,22 @@ Se detallan y se muestra cómo son las conexiones entre el Arduino, sensor de co
 
 ☞ Nosotras la estábamos conectando directamente al arduino, pero siempre se iba a ver así:
 
-![pantalla](imagenes/error_pantalla.jpg)
+![pantalla](./imagenes/error_pantalla.jpg)
 
 ☞ **Otro problema** que tuvimos fue que **para mostrar una imagen a todo color en esta pantalla se necesita un «buffer» o espacio en memoria**. Un buffer completo para 240×240 píxeles con colores de 16 bits (2 bytes por píxel) **requeriría 240 * 240 * 2 = 115,200 bytes (112.5 KB)**. Un **Arduino UNO solo tiene 2KB de RAM**, lo que hace imposible almacenar la imagen completa en memoria. **Librerías como TFT_eSPI** están optimizadas para dibujar directamente en la pantalla sin un buffer completo, pero para aplicaciones gráficas complejas, se **recomienda encarecidamente usar un microcontrolador con más RAM, como un ESP32, que es la pareja ideal para esta pantalla.**
 
-
 ☞ Misa nos hizo una **clase magistral sobre la teoría de la electricidad**, cómo soldar los level shifter, la conexion de la pantalla al arduino y cómo iba a funcionar todo esto, explicado en diagrama de abajo.
 
-![pantalla](imagenes/conexion_pantalla_tft.jpg)
-
+![pantalla](./imagenes/conexion_pantalla_tft.jpg)
 
 Como vimos que la pantalla funcionaba con 3.3V, tuvimos que cambiar de arduino a uno que en sus pines no tuviera 5V, es por eso que decidimos hacer la conexión con un Arduino Uno R3, con los level shifter y sus conexiones correspondientes, para evitar que se quemara la pantalla y que las animaciones pudieran verse sin problemas.
-![conversor de voltaje](imagenes/level_shifter.jpg)
+![conversor de voltaje](./imagenes/level_shifter.jpg)
 
-![Pantalla TFT](imagenes/pantalla_circular.jpg)
+![Pantalla TFT](./imagenes/pantalla_circular.jpg)
 
 Prueba de la pantalla en funcionamiento
 
-![prueba pantalla](imagenes/pantalla_verde.jpg)
-
+![prueba pantalla](./imagenes/pantalla_verde.jpg)
 
 ### 🔊 Conexión del parlante con el reproductor MP3
 
@@ -139,13 +134,14 @@ Para la reproducción de los audios, se crearon mediante inteligencia artificial
 A continuación se explica el código que se desarrolló para cada sensor/actuador, mostrado con imágenes:
 
 ### Calibración y estabilidad del sensor de color
+
 ➜ Durante las primeras pruebas, los valores de frecuencia entregados por el sensor eran muy altos y variaban según la luz ambiental, lo que hacía que el sistema fuera demasiado sensible e inestable.
 
 Para solucionar este problema:
 - Se diseñó un **protector impreso en 3D** (https://cults3d.com/es/modelo-3d/artilugios/color-sensor-for-smars) que cubre el sensor y evita la entrada de la luz externa.
 - Luego se realizaron pruebas en un espacio oscuro, lo que permitió obtener lecturas más estables y precisas.
 
-![sensor de color](imagenes/sensor_reconocimiento.jpg)
+![sensor de color](./imagenes/sensor_reconocimiento.jpg)
 
 ➜ Durante las pruebas, notamos que los valores de frecuencia del sensor eran muy altos y resultaba difícil diferenciar los colores. Para solucionarlo, decidimos limitar el valor máximo mediante una función.
 
@@ -308,9 +304,10 @@ Al igual que la otra parte los datos númericos deberán ir siendo modificado en
 Se realizó una prueba, pero no fue posible obtener una lectura correcta, ya que el chicle pasaba demasiado rápido y el sensor de color no alcanzaba a detectarlo.
 Además, el color de la impresión era blanca, lo que dificultó la detección de frecuencias de color por falta de contraste.
 
-![referencias](imagenes/prueba-sensor.jpg)
+![referencias](./imagenes/prueba-sensor.jpg)
 
 ### 🚥 Código final del sensor de color
+
 ```cpp
 // Pines del sensor
 #define S0 2
@@ -419,6 +416,7 @@ bool cercaDe(int valor, int objetivo) {
 ```
 
 ## 🔊 Código para reproducción del audio
+
 ➜ Primero una aproximación del pseudocódigo y qué es lo que se quiere lograr.
 
 ```cpp
@@ -450,7 +448,7 @@ configurarParlante();
   //hacer 4 clases con distintos parámetros
  }
 ```
-En (https://projecthub.arduino.cc/SurtrTech/color-detection-using-tcs3200230-a1e463), Miguel encontró un **tutorial de cómo configurar el sensor de colores** de manera que sus valores se muestren en el monitor serial. Este código sirve como cimiento para después agregar los actuadores necesarios. Queremos que se detecten 4 colores con el sensor asi que hay que agregar 1 valor para el color amarillo. De todas maneras todos los valores son referenciales y **deben ser medidos con nuestros implementos para que sean precisos**.
+En (<https://projecthub.arduino.cc/SurtrTech/color-detection-using-tcs3200230-a1e463>), Miguel encontró un **tutorial de cómo configurar el sensor de colores** de manera que sus valores se muestren en el monitor serial. Este código sirve como cimiento para después agregar los actuadores necesarios. Queremos que se detecten 4 colores con el sensor asi que hay que agregar 1 valor para el color amarillo. De todas maneras todos los valores son referenciales y **deben ser medidos con nuestros implementos para que sean precisos**.
 
 ```cpp
 #define s0 8        //Module pins wiring
@@ -512,7 +510,7 @@ void GetColors()
 
 ## 🔊 Reproductor MP3 DF Player Mini
 
-![MP3](imagenes/modulo_mp3.jpg) 
+![MP3](./imagenes/modulo_mp3.jpg) 
 
 Después de hacer que el MP3 funcionara correctamente y reproduciera audio de la tarjeta SD es momento de ajustarlo a lo que necesitamos:
 
@@ -564,11 +562,15 @@ else if (colorDetectado = 4){
 }
 }
 ```
+
 ### El siguiente paso es configurar el sensor de color según los parámetros RGB que nos dé cada dulce, sumarlos a la función y asignarles un número.
+
 ```cpp
 int colorDetectado;
 ```
+
 ### 🚥 Código según color para el audio
+
 ```cpp
 #include "Arduino.h"
 #include "DFRobotDFPlayerMini.h"
@@ -771,11 +773,12 @@ int obtenerColor() {
   return 0;
 }
 ```
+
 ## Conectando el sensor de color y el DFPlayer 
 
 Miguel con Nicolás conectaron el **sensor de color** y el **DFPlayer** en **un mismo Arduino utilizando la protoboard.
 
-![Audio_Sensor](imagenes/Audio_Sensor.jpeg)
+![Audio_Sensor](./imagenes/Audio_Sensor.jpeg)
 
 Lograron realizar la conexión correctamente, pero en el código tuvieron problemas para sincronizar la detección de colores con la reproducción de los audios.
 
@@ -819,13 +822,12 @@ Luego pasamos a considerar que el cuerpo del robot podía llegar a ser muy peque
 A la base le pondremos el codo pegado al cuerpo para que solo se mueva el antebrazo, por la misma razón anterior. Valentina nos comentó que también tenía el vibrador del joystick, que tal vez podríamos usar en vez del motor DC, así que decidimos que íbamos a probar ambas opciones y ver qué sucedía. Sin embargo, según los parámetros, no nos convencía, así que decidimos probar otro y aumentar la distancia, ya que esta podía influir mucho en el resultado.
 ```
 
-
-
 ### Código para animaciones de la pantalla TFT circular 
 
 Las **pantallas TFT LCD funcionan mediante el control de píxeles individuales para crear imágenes detalladas y de alta calidad**. Utilizan un controlador como el **GC9A01** para gestionar la información que se muestra en la pantalla. La interfaz SPI permite una comunicación rápida y eficiente con microcontroladores, lo que facilita la integración en proyectos.
 
 ### Código base para su funcionamiento
+
 ```cpp
 #include <Arduino_GFX_Library.h>
 #include <Adafruit_GFX.>
@@ -881,16 +883,18 @@ void setup() {
 
 void loop() {}
 ```
+
 ### 👁️ Referentes para la animación del ojo
+
 Gustavo Lita esta basado en distintos personajes ya existentes como los Sirulios de 31 minutos, Kang y Kodos de Los Simpson, los Minions, entre otros.
 
 La idea es que el personaje solo tenga un ojo (la pantalla circular es el ojo) para eso tenemos también de referentes a personajes como Mike Wazowski de Monster Inc, Plankton de Bob esponja, B.O.B de Monstruos v/s aliens y algunos minions, Leela de Futurama . Con estos personajes podemos ver bien como expresar ciertas emociones sin la necesidad de que tenga cejas y teniendo un solo ojo con espacio limitado para desarrollar la expresión que se quiera dar.
 
-![referencias](imagenes/referencias.jpg)
+![referencias](./imagenes/referencias.jpg)
 
 ### 👁️ Ilustraciones de los ojos que queríamos que tuviera Gustavo Lita
 
-![referencias](imagenes/ojos.jpg)
+![referencias](./imagenes/ojos.jpg)
 
 ## 🔍 Pruebas y resultados
 
@@ -899,27 +903,26 @@ La idea es que el personaje solo tenga un ojo (la pantalla circular es el ojo) p
 ![boceto](imagenes/boceto.jpg)
 
 ### 🧩 Piezas impresas del prototipo
+
 Camila se encargó de ver los prototipos impresos en 3D. Hubieron muchas pruebas y error, hasta que finalmente llegamos con el diseño que se quería.
 
-![collage](imagenes/prototipo_collage.jpg)
+![collage](./imagenes/prototipo_collage.jpg)
 
-![piezas](imagenes/piezas.jpg)
+![piezas](./imagenes/piezas.jpg)
 
 ### Carcasa para la pantalla
 
-![carcasa pantalla](imagenes/carcasa_pantalla.jpg)
+![carcasa pantalla](./imagenes/carcasa_pantalla.jpg)
 
 ### Primeros Prototipos
 
-![forma](imagenes/prototipo_verde.jpg)
+![forma](./imagenes/prototipo_verde.jpg)
 
 ### Se incluye la pantalla
-![monstruo](imagenes/monstruo.jpg)
+![monstruo](./imagenes/monstruo.jpg)
 
 ### 🧩 Diseño final de Gustavo Lita
-![diseño](imagenes/3d.jpg)
-
-
+![diseño](./imagenes/3d.jpg)
 
 ## ⚡️ Problemas al fusionar
 
@@ -929,13 +932,11 @@ Para unir sensor de color, reproductor mp3 DFPlayer y pantalla GC9A01A tuvimos q
 
 -Por el tipo de cable que usa este arduino no se pueden poner los pines RX y TX en 00 y 01. Esto nos obligó a cambiar el resto de los pines para hacerle un espacio a los del reproductor. Después de varios cambios RX quedó en 12 y TX en 7.
 
-
 **Separados**
-![Reproductor DFPlayer con sensor de color en Arduino R4 y Pantalla con Arduino R3](imagenes/Separados.jpg)
+![Reproductor DFPlayer con sensor de color en Arduino R4 y Pantalla con Arduino R3](./imagenes/Separados.jpg)
 
 **Juntos**
-![Reproductor DFPlayer con sensor de color unido a Pantalla con Arduino R3 ](imagenes/Juntos.jpg)
-
+![Reproductor DFPlayer con sensor de color unido a Pantalla con Arduino R3 ](./imagenes/Juntos.jpg)
 
 ## 📖 Bibliografía 
 - EazyTronic. (s.f.). How to use GC9A01 display with Arduino. EazyTronic. (https://eazytronic.com/gc9a01-with-arduino/)
